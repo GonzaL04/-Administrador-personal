@@ -1,0 +1,45 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+{% include 'layouts/partials/tareasPage/menuTareas.html' %}
+
+<h1 class="text-center py-1">Tareas en Curso</h1>
+
+    <div class="container">
+        <div class="row">
+        {% for tarea in tareas %}
+            {% if tarea.estado != 'completada' %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ tarea.titulo }}</h5>
+                            <p class="card-text">{{ tarea.descripcion }}</p>
+                            <p class="card-text">Estado: {{ tarea.estado }}</p>
+
+                            <!-- BOTON VER TAREA -->
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#verTareaModal{{ tarea.id }}">Ver tarea</button>
+                            <!-- FIN BOTON VER TAREA-->
+                            <!-- VENTANA EMERGENTE VER TAREA -->
+                            {% include 'layouts/partials/tareasPage/modalVer.html' %}
+                            <!-- FIN VENTANA EMERGENTE VER TAREA-->
+
+                            <!--BOTON ACTUALIZAR TAREA-->
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarModal{{ tarea.id }}">Actualizar tarea</button>
+                            <!-- FIN BOTON ACTUALIZAR TAREA -->
+                            <!-- VENTANA EMERGENTE ACTUALIZAR TAREA -->
+                            {% include 'layouts/partials/tareasPage/tareasCurso/modalActualizarCurso.html' %}
+                            <!-- FIN VENTANA EMERGENTE ACTUALIZAR TAREA -->
+
+                            <!-- BOTON BORRAR TAREA -->
+                            <a href="{% url 'borrarTareaCurso' tarea.id %}?next={% url 'tareasCurso' %}" class="btn btn-danger">Borrar tarea</a>
+                            <!-- FIN BOTON BORRAR TAREA-->
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

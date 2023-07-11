@@ -1,0 +1,42 @@
+<!-- Ventana emergente para ver tarea -->
+{% load static %}
+<div class="modal fade" id="verTareaModal{{ tarea.id }}" tabindex="-1" aria-labelledby="verTareaModalLabel{{ tarea.id }}" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-dark" id="verTareaModalLabel{{ tarea.id }}">Tarea: {{ tarea.titulo }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-dark">Título:</h4>
+                <p class="text-dark">{{ tarea.titulo }}</p>
+                <h4 class="text-dark">Descripción:</h4>
+                <p class="text-dark">{{ tarea.descripcion }}</p>
+                <h4 class="text-dark">Fecha de creación:</h4>
+                <p class="text-dark">{{ tarea.fcreada }}</p>
+                <h4 class="text-dark">Importante:</h4>
+                <p class="text-dark">
+                    {% if tarea.importante %}
+                        Sí
+                    {% else %}
+                        No
+                    {% endif %}
+                </p>
+                <h4 class="text-dark">Contactos asignados:</h4>
+                {% if tarea.contacto.exists %}
+                    <ul>
+                        {% for contacto in tarea.contacto.all %}
+                            <li>{{ contacto.nombre }} {{ contacto.apellido }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-dark">No hay contacto asignado.</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin de la ventana emergente -->

@@ -1,0 +1,53 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block content %}
+
+{% include 'layouts/partials/tareasPage/menuTareas.html' %}
+
+<h1 class="text-center py-1">Tareas Pendientes</h1>
+
+<!-- BOTON CREAR TAREA -->
+<button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#crearTareaModal">Crear tarea</button>
+<!-- FIN BOTON CREAR TAREA -->
+
+<!-- VENTANA EMERGENTE CREAR TAREA -->
+{% include 'layouts/partials/tareasPage/tareasPendientes/modalCrear.html' %}
+<!-- FIN VENTANA EMERGENTE CREAR TAREA -->
+
+
+<div class="container">
+    {% for tarea in tareas %}
+        {% if tarea.estado != 'en_curso' %}
+            {% if tarea.estado != 'completada' %}
+                <div class="card mb-3 {% if tarea.importante %}border border-danger{% endif %}">
+                    <div class="card-body">
+                        <h2 class="card-title {% if tarea.importante %}text-danger{% endif %}">{{ tarea.titulo }} - {{ user.username }}</h2>
+                        <p class="card-text">{{ tarea.descripcion|truncatewords:20 }}</p>
+
+                        <!-- BOTON VER TAREA -->
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#verTareaModal{{ tarea.id }}">Ver tarea</button>
+                        <!-- FIN BOTON VER TAREA-->
+                        <!-- VENTANA EMERGENTE VER TAREA -->
+                        {% include 'layouts/partials/tareasPage/modalVer.html' %}
+                        <!-- FIN VENTANA EMERGENTE VER TAREA-->
+
+                        <!--BOTON ACTUALIZAR TAREA-->
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarModal{{ tarea.id }}">Actualizar tarea</button>
+                        <!-- FIN BOTON ACTUALIZAR TAREA -->
+                        <!-- VENTANA EMERGENTE ACTUALIZAR TAREA -->
+                        {% include 'layouts/partials/tareasPage/tareasPendientes/modalActualizar.html' %}
+                        <!-- FIN VENTANA EMERGENTE ACTUALIZAR TAREA -->
+
+                        <!-- BOTON BORRAR TAREA -->
+                        <a href="{% url 'borrarTareaPendientes' tarea.id %}?next={% url 'tareasPendientes' %}" class="btn btn-danger">Borrar tarea</a>
+                        <!-- FIN BOTON BORRAR TAREA-->
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+{% endblock %}
