@@ -26,4 +26,5 @@ urlpatterns = [
     path('signin/', views.signin, name="signin"),
     path('contacto/', include('contacto.urls'), name="contacto"),
     path('tareas/', include('tareas.urls'), name="tareas"),
+    path('gastos/', include('gastos.urls'), name="gastos"),
 ]
