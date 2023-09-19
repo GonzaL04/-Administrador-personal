@@ -1,0 +1,44 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+{% include 'layouts/partials/tareasPage/menuTareas.html' %}
+
+<h1 class="text-center py-1">Tareas Completadas</h1>
+
+{% if tareas_completadas %}
+<div class="row">
+    {% for tarea in tareas_completadas %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tarea.titulo }}</h5>
+                    <p class="card-text">{{ tarea.descripcion }}</p>
+                    <p class="card-text">Fecha completada: {{ tarea.fcompletada|date:"Y-m-d H:i:s" }}</p>
+
+
+                    <!-- BOTON VER TAREA -->
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#verTareaModal{{ tarea.id }}">Ver tarea</button>
+                    <!-- FIN BOTON VER TAREA-->
+                    <!-- VENTANA EMERGENTE VER TAREA -->
+                    {% include 'layouts/partials/tareasPage/modalVer.html' %}
+                    <!-- FIN VENTANA EMERGENTE VER TAREA-->
+
+                    <!--BOTON ACTUALIZAR TAREA-->
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarModal{{ tarea.id }}">Actualizar tarea</button>
+                    <!-- FIN BOTON ACTUALIZAR TAREA -->
+                    <!-- VENTANA EMERGENTE ACTUALIZAR TAREA -->
+                    {% include 'layouts/partials/tareasPage/tareasCompletadas/modalActualizarTarea.html' %}
+                    <!-- FIN VENTANA EMERGENTE ACTUALIZAR TAREA -->
+
+                    <!-- BOTON BORRAR TAREA -->
+                    <a href="{% url 'borrarTareaCompletadas' tarea.id %}?next={% url 'tareasCompletadas' %}" class="btn btn-danger">Borrar tarea</a>
+                    <!-- FIN BOTON BORRAR TAREA-->
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

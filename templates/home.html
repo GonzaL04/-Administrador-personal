@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+
+{% block 'title' %} Home {% endblock %}
+
+{% block content %}
+
+{% include 'layouts/partials/menu.html' %}
+
+<section class='container py-5'>
+    <div class='txt'>
+        <h1 class='display-1 text-center text-dark'>Administrador personal</h1>
+        <h5 class='txt py-2 text-center text-dark'>
+            ¡Bienvenido a tu administrador personal! 
+        </h5>
+        <p class='txt py-0 text-center text-dark'>
+            En este sitio web, tu podras organizar tus dias de una manera muy sencilla. No solo eso, tambien podras organizar proyectos que tengas pensados, de tal manera que los podes anotar y agendar contactos si es que el proyecto esta pensado con otras personas. Para saber sobre las demas funciones logueate o registrate en caso de que sea tu primera vez en este sitio web.
+        </p>
+    </div>
+
+    <div class='text-center py-3'>
+        <a class='btn btn-dark' href="signin/">
+            Logueate
+        </a>
+        <a class='btn btn-dark' href="signup/">
+            Registrate
+        </a>
+    </div>
+</section>
+
+{% endblock %}
+

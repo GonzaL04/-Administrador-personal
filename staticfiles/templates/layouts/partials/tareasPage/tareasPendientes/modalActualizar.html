@@ -1,0 +1,47 @@
+<!-- Ventana emergente para actualizar tarea -->
+<div class="modal fade" id="editarModal{{ tarea.id }}" tabindex="-1" aria-labelledby="editarModalLabel{{ tarea.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalLabel{{ tarea.id }}">Editar Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'editarTarea' tarea_id=tarea.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo" value="{{ tarea.titulo }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion">{{ tarea.descripcion }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="importante" class="form-label">Importante</label>
+                        <select class="form-select" id="importante" name="importante">
+                            <option value="1" {% if tarea.importante == '1' %}selected{% endif %}>Sí</option>
+                            <option value="0" {% if tarea.importante == '0' %}selected{% endif %}>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactos">Contactos asignados</label>
+                        {% for contacto in contactos %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="contactos" value="{{ contacto.id }}" {% if contacto in tarea.contactos.all %}checked{% endif %}>
+                            <label class="form-check-label" for="contactos">{{ contacto.nombre }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a href="{% url 'mover_a_curso' tarea.id %}" class="btn btn-warning">Empezar</a>
+                        <a href="{% url 'completar_tarea' tarea.id %}" class="btn btn-success">Terminar</a>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin de la ventana emergente -->

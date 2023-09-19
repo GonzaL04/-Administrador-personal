@@ -1,0 +1,109 @@
+{% extends 'layouts/base.html' %}
+
+{% block 'title' %} Gastos {% endblock %}
+
+{% block content %}
+
+{% include 'layouts/partials/menu.html' %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home_gastos' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home_categorias' %}">Categorías</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home_cuentas' %}">Cuentas</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearCuentaModal">Añadir Cuenta</button>
+<div class="modal fade" id="crearCuentaModal" tabindex="-1" aria-labelledby="crearCuentaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearCuentaModalLabel">Crear Nueva Cuenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'agregar_cuenta' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre de la Cuenta:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre de la cuenta">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Fecha de Creación</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cuenta in cuentas %}
+            <tr>
+                <td class="py-4">{{ cuenta.nombre }}</td>
+                <td class="py-4">{{ cuenta.fecha_de_creacion }}</td>
+                <td class="py-4">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarCuentaModal{{ cuenta.id }}">Editar</button>
+                    {% for cuenta in cuentas %}
+                        <div class="modal fade" id="editarCuentaModal{{ cuenta.id }}" tabindex="-1" aria-labelledby="editarCuentaModalLabel{{ cuenta.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editarCuentaModalLabel{{ cuenta.id }}">Editar Cuenta</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post" action="{% url 'editar_cuenta' cuenta.id %}">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="nombre" class="form-label">Nuevo Nombre de la Cuenta:</label>
+                                                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ cuenta.nombre }}">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </td>
+                <td class="py-4">
+                    <form method="post" action="{% url 'borrar_cuenta' cuenta.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

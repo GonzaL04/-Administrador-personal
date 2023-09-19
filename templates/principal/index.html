@@ -1,0 +1,18 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block 'title' %} Home {% endblock %}
+
+{% block content %}
+
+{% include 'layouts/partials/menu.html' %}
+<div class="container card card-body mt-5">
+    <h1 class="text-dark text-center">Bienvenido a tu Administrador Personal, {{user.username}}</h1>
+    <div class="cards">
+        <a href="{% url 'indexContacto' %}" class="card">CONTACTO</a>
+        <a href="{% url 'tareasPendientes' %}" class="card">TAREAS</a>
+        <a href="{% url 'home_gastos' %}" class="card">GASTOS</a>
+    </div>
+</div>
+{% endblock %}

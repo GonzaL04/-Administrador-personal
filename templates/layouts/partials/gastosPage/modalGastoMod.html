@@ -1,0 +1,39 @@
+<div class="modal fade" id="editarGastoModal{{ gasto.id }}" tabindex="-1" aria-labelledby="editarGastoModalLabel{{ gasto.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarGastoModalLabel{{ gasto.id }}">Editar Gasto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'editar_gasto' gasto.id cuenta.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="categoria">Categoría:</label>
+                        <select class="form-control" id="categoria" name="fk_id_categoria">
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}" {% if categoria.id == gasto.fk_id_categoria.id %}selected{% endif %}>{{ categoria.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripción">Descripción:</label>
+                        <input type="text" class="form-control" id="descripción" name="descripción" value="{{ gasto.descripción }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="precio">Precio:</label>
+                        <input type="text" class="form-control" id="precio" name="precio" value="{{ gasto.precio }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha">Fecha:</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" value="{{ gasto.fecha }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
