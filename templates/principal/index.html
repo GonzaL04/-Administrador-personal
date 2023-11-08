@@ -7,12 +7,20 @@
 {% block content %}
 
 {% include 'layouts/partials/menu.html' %}
-<div class="container card card-body mt-5">
+<div class="container card card-body mt-5 d-flex align-items-center justify-content-center">
     <h1 class="text-dark text-center">Bienvenido a tu Administrador Personal, {{user.username}}</h1>
-    <div class="cards">
-        <a href="{% url 'indexContacto' %}" class="card">CONTACTO</a>
-        <a href="{% url 'tareasPendientes' %}" class="card">TAREAS</a>
-        <a href="{% url 'home_gastos' %}" class="card">GASTOS</a>
+    <div class="cards d-flex flex-row" style= "padding: 10rem;">
+        <a href="{% url 'indexContacto' %}" class="card text-center d-flex justify-content-center align-items-center" style="width: 250px; height: 250px; margin: 0 50px; text-decoration: none">
+            CONTACTO
+        </a>
+        <a href="{% url 'tareasPendientes' %}" class="card text-center d-flex justify-content-center align-items-center" style="width: 250px; height: 250px; margin: 0 50px; text-decoration: none">
+            TAREAS
+        </a>
+        <a href="{% url 'home_gastos' %}" class="card text-center d-flex justify-content-center align-items-center" style="width: 250px; height: 250px; margin: 0 50px; text-decoration: none">
+            GASTOS
+        </a>
     </div>
 </div>
+
+
 {% endblock %}

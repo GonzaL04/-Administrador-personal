@@ -27,7 +27,10 @@
     </div>
 </nav>
 
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearCuentaModal">Añadir Cuenta</button>
+<div class="d-flex justify-content-center pt-3">
+    <button type="button" class="btn btn-success" style="padding: 10px 50px"  data-bs-toggle="modal" data-bs-target="#crearCuentaModal">Añadir Cuenta</button>
+</div>
+
 <div class="modal fade" id="crearCuentaModal" tabindex="-1" aria-labelledby="crearCuentaModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -55,7 +58,7 @@
 
 <table class="table table-striped">
     <thead>
-        <tr>
+        <tr class="text-center">
             <th>Nombre</th>
             <th>Fecha de Creación</th>
             <th>Editar</th>
@@ -64,7 +67,7 @@
     </thead>
     <tbody>
         {% for cuenta in cuentas %}
-            <tr>
+            <tr class="text-center">
                 <td class="py-4">{{ cuenta.nombre }}</td>
                 <td class="py-4">{{ cuenta.fecha_de_creacion }}</td>
                 <td class="py-4">

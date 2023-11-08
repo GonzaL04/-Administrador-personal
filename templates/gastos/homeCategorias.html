@@ -27,9 +27,9 @@
     </div>
 </nav>
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearCategoriaModal">
-    Añadir
-</button>
+<div class="d-flex justify-content-center pt-3">
+    <button type="button" class="btn btn-success" style="padding: 10px 50px"  data-bs-toggle="modal" data-bs-target="#crearCategoriaModal">Añadir Categoria</button>
+</div>
 
 <div class="modal fade" id="crearCategoriaModal" tabindex="-1" aria-labelledby="crearCategoriaModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -57,15 +57,15 @@
 
 
 
-<table class="table table-striped mx-5">
+<table class="table table-striped ">
     <thead>
-        <tr>
+        <tr class="text-center">
             <th>Nombre</th>
             <th>Editar</th>
             <th>Borrar</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="text-center">
         {% for categoria in categorias %}
             <tr>
                 <td class="py-4">{{ categoria.nombre }}</td>

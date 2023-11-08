@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -22,6 +23,8 @@ class Gastos(models.Model):
     descripción = models.CharField(max_length=200,null=True,blank=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     fecha = models.DateField()
+    hora = models.TimeField(default=timezone.now)
+    
 
     def __str__(self):
         if( self.descripción == None):

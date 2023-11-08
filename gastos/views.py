@@ -1,16 +1,51 @@
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
 from gastos import models
 from gastos.forms import *
 from gastos.models import Categorias
+from django.db.models import Sum
+from datetime import date, timedelta
 
 def home_gastos(request):
     cuentas = Cuentas.objects.filter(user=request.user)
     categorias = Categorias.objects.filter(user=request.user)
+
     context = {
-        'cuentas' : cuentas,
-        'categorias' : categorias
+        'cuentas_data': [],
+        'cuentas': cuentas,
+        'categorias': categorias,
     }
+
+    today = date.today()
+
+    for cuenta in cuentas:
+        ultimo_gasto_cuenta = Gastos.objects.filter(fk_id_cuenta=cuenta).order_by('-fecha', '-hora').first()
+        
+        gastos_cuenta = Gastos.objects.filter(fk_id_cuenta=cuenta)
+
+        primer_dia_mes = today.replace(day=1)
+        ultimo_dia_mes = (today.replace(day=1, month=(today.month % 12) + 1) - timedelta(days=1))
+
+        mes_actual_cuenta = gastos_cuenta.filter(
+            fecha__range=[primer_dia_mes, ultimo_dia_mes]
+        ).aggregate(Sum('precio'))['precio__sum']
+
+        mes_actual = mes_actual_cuenta if mes_actual_cuenta else 0
+
+        gasto_total_cuenta = gastos_cuenta.aggregate(Sum('precio'))['precio__sum']
+        gasto_total = gasto_total_cuenta if gasto_total_cuenta else 0
+
+        cuenta_data = {
+            'cuenta': cuenta,
+            'ultimo_gasto': ultimo_gasto_cuenta,
+            'mes_actual': mes_actual,
+            'gasto_total': gasto_total,
+            'gastos_cuenta': gastos_cuenta,
+        }
+
+        context['cuentas_data'].append(cuenta_data)
+
     return render(request, 'gastos/homeGastos.html', context)
 
 def home_categorias(request):
@@ -135,28 +170,34 @@ def editar_cuenta(request, cuenta_id):
     return render(request, 'gastos/editarCuenta.html', context)
 # END VIEWS CUENTAS
 
+
 # VIEWS GASTOS
 def crear_gasto(request):
     if request.method == 'POST':
-        cuenta_id = request.POST.get('cuenta_id')
-        cuenta = get_object_or_404(Cuentas, id=cuenta_id, user=request.user)
-
         categoria_id = request.POST.get('categoria')
         categoria = get_object_or_404(Categorias, id=categoria_id, user=request.user)
-
         descripcion = request.POST.get('descripcion')
         precio = request.POST.get('precio')
         fecha = request.POST.get('fecha')
+        fecha_gasto = date.fromisoformat(fecha)
+        if fecha_gasto > date.today():
+            messages.error(request, "No puedes agregar un gasto en el futuro.")
+            return redirect('home_gastos')
 
-        nuevo_gasto = Gastos(
-            fk_id_categoria=categoria,
-            fk_id_cuenta=cuenta,
-            descripción=descripcion,
-            precio=precio,
-            fecha=fecha
-        )
-        nuevo_gasto.save()
+        cuentas_seleccionadas = request.POST.getlist('cuentas')
 
+        for cuenta_id in cuentas_seleccionadas:
+            cuenta = get_object_or_404(Cuentas, id=cuenta_id, user=request.user)
+
+            nuevo_gasto = Gastos(
+                fk_id_categoria=categoria,
+                fk_id_cuenta=cuenta,
+                descripción=descripcion,
+                precio=precio,
+                fecha=fecha
+            )
+            nuevo_gasto.save()
+            
         return redirect('home_gastos')
 
 def eliminar_gasto(request, gasto_id, cuenta_id):

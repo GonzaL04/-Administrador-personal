@@ -137,6 +137,7 @@ def borrarTarea(request, tarea_id):
 def editarTarea(request, tarea_id):
     #Obtiene la tarea por su ID
     tarea = Tareas.objects.get(id=tarea_id)
+    
 
     #Verifica si la solicitud es POST, se actualizan los campos de la tarea con los valores proporcionados en la solicitud.
     if request.method == 'POST':
@@ -145,7 +146,7 @@ def editarTarea(request, tarea_id):
         tarea.importante = request.POST['importante']
         
         #Se obtienen los ID de los contactos seleccionados y se filtran los contactos correspondientes
-        contactos_ids = request.POST.getlist('contactos')  
+        contactos_ids = tarea.contacto.values_list('id', flat=True) 
         contactos = Contacto.objects.filter(id__in=contactos_ids)
 
         #Actualiza la relacion de contactos de la tarea usando set y se guarda la tarea modificada.

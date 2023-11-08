@@ -6,169 +6,160 @@
 
 {% include 'layouts/partials/menu.html' %}
 
-
-<!-- AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO -->
-    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#agregarModal">Agregar</button>
-
-<div class="modal fade" id="agregarModal" tabindex="-1" aria-labelledby="agregarModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="agregarModalLabel">Agregar Contacto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between">
+        <div class="container mt-4">
+            <div class="text-center">
+                <button class="btn btn-success mb-5" style="padding: 10px 50px"  type="button" data-bs-toggle="modal" data-bs-target="#agregarModal">Agregar Contacto</button>
             </div>
-            <div class="modal-body">
-                <form method="POST" action="{% url 'agregar_contacto' %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre">
+        <div class="modal fade" id="agregarModal" tabindex="-1" aria-labelledby="agregarModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agregarModalLabel">Agregar Contacto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        <label for="apellido" class="form-label">Apellido</label>
-                        <input type="text" class="form-control" id="apellido" name="apellido">
+                    <div class="modal-body">
+                        <form method="POST" action="{% url 'agregar_contacto' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre">
+                            </div>
+                            <div class="mb-3">
+                                <label for="apellido" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="apellido" name="apellido">
+                            </div>
+                            <div class="mb-3">
+                                <label for="celular" class="form-label">Celular</label>
+                                <input type="text" class="form-control" id="celular" name="celular">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="compania" class="form-label">Compañia</label>
+                                <input type="text" class="form-control" id="compania" name="compania">
+                            </div>
+                            <div class="mb-3">
+                                <label for="fecha" class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="fecha" name="fecha">
+                            </div>
+                            <div class="mb-3">
+                                <label for="notas" class="form-label">Notas</label>
+                                <textarea class="form-control" id="notas" name="notas"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="celular" class="form-label">Celular</label>
-                        <input type="text" class="form-control" id="celular" name="celular">
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="compania" class="form-label">Compañia</label>
-                        <input type="text" class="form-control" id="compania" name="compania">
-                    </div>
-                    <div class="mb-3">
-                        <label for="fecha" class="form-label">Fecha</label>
-                        <input type="date" class="form-control" id="fecha" name="fecha">
-                    </div>
-                    <div class="mb-3">
-                        <label for="notas" class="form-label">Notas</label>
-                        <textarea class="form-control" id="notas" name="notas"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
+        </div>
     </div>
-</div>
-<!-- AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO AGREGAR CONTACTO -->
-
-
-<div class="tabla-contactos">
-    <table class="table table-secondary table-hover mt-5 w-50 mx-auto">
+    
+    <table class="table table-striped text-center">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col"></th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Borrar</th>
             </tr>
         </thead>
         <tbody>
             {% for contacto in contactos %}
                 <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ contacto }}</td>
+                    <td>{{ contacto.nombre }}</td>
                     <td>{{ contacto.apellido }}</td>
-                    <td class="text-end">
-                        <span>
-
-
-                            <!-- VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO  -->
-                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ contacto.id }}">
-                                    Ver
-                            </button>
-                            <div class="modal fade" id="exampleModal{{ contacto.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content text-start">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Detalle del contacto</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <ul class="list">
-                                                <li><b>Nombre: </b> {{ contacto.nombre }}</li>
-                                                <li><b>Apellido: </b> {{ contacto.apellido }}</li>
-                                                <li><b>Celular: </b> {{ contacto.celular }}</li>
-                                                <li><b>Email: </b> {{ contacto.email }}</li>
-                                                <li><b>Compañia: </b> {{ contacto.compania }}</li>
-                                                <li><b>Fecha: </b> {{ contacto.fecha }}</li>
-                                                <li><b>Notas: </b> {{ contacto.notas }}</li>
-                                            </ul>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                        </div>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ contacto.id }}">Ver</button> 
+                        <!-- VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO  -->
+                        <div class="modal fade" id="exampleModal{{ contacto.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content text-start">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Detalle del contacto</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul class="list">
+                                            <li><b>Nombre: </b> {{ contacto.nombre }}</li>
+                                            <li><b>Apellido: </b> {{ contacto.apellido }}</li>
+                                            <li><b>Celular: </b> {{ contacto.celular }}</li>
+                                            <li><b>Email: </b> {{ contacto.email }}</li>
+                                            <li><b>Compañia: </b> {{ contacto.compania }}</li>
+                                            <li><b>Fecha: </b> {{ contacto.fecha }}</li>
+                                            <li><b>Notas: </b> {{ contacto.notas }}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO  -->
-
-
-                            <!-- EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO  -->
-                            <button class="btn btn-secondary" href="#" data-bs-toggle="modal" data-bs-target="#editarModal{{ contacto.id }}">Editar</button>
-
-                            <div class="modal fade" id="editarModal{{ contacto.id }}" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content text-start">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editarModalLabel">Editar Contacto</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="POST" action="{% url 'editar_contacto' contacto_id=contacto.id %}">
-                                                {% csrf_token %}
-                                                <div class="mb-3">
-                                                    <label for="nombre" class="form-label">Nombre</label>
-                                                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ contacto.nombre }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="apellido" class="form-label">Apellido</label>
-                                                    <input type="text" class="form-control" id="apellido" name="apellido" value="{{ contacto.apellido }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="celular" class="form-label">Celular</label>
-                                                    <input type="text" class="form-control" id="celular" name="celular" value="{{ contacto.celular }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="email" class="form-label">Email</label>
-                                                    <input type="email" class="form-control" id="email" name="email" value="{{ contacto.email }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="compania" class="form-label">Compañia</label>
-                                                    <input type="text" class="form-control" id="compania" name="compania" value="{{ contacto.compania }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="fecha" class="form-label">Fecha</label>
-                                                    <input type="date" class="form-control" id="fecha" name="fecha" value="{{ contacto.fecha }}">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="notas" class="form-label">Notas</label>
-                                                    <textarea class="form-control" id="notas" name="notas">{{ contacto.notas }}</textarea>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                        </div>
+                        <!-- VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO VER CONTACTO  -->
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#editarModal{{ contacto.id }}">Editar</button>
+                        <!-- EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO  -->
+                        <div class="modal fade" id="editarModal{{ contacto.id }}" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content text-start">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editarModalLabel">Editar Contacto</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="{% url 'editar_contacto' contacto_id=contacto.id %}">
+                                            {% csrf_token %}
+                                            <div class="mb-3">
+                                                <label for="nombre" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ contacto.nombre }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="apellido" class="form-label">Apellido</label>
+                                                <input type="text" class="form-control" id="apellido" name="apellido" value="{{ contacto.apellido }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="celular" class="form-label">Celular</label>
+                                                <input type="text" class="form-control" id="celular" name="celular" value="{{ contacto.celular }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ contacto.email }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="compania" class="form-label">Compañia</label>
+                                                <input type="text" class="form-control" id="compania" name="compania" value="{{ contacto.compania }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="fecha" class="form-label">Fecha</label>
+                                                <input type="date" class="form-control" id="fecha" name="fecha" value="{{ contacto.fecha }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="notas" class="form-label">Notas</label>
+                                                <textarea class="form-control" id="notas" name="notas">{{ contacto.notas }}</textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                            <!-- EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO  -->
-
-                            <!--BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO -->
-                                <a class="btn btn-secondary" type="button" href="{% url 'borrar_contacto' id=contacto.id %}">Borrar</a>
-                            <!--BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO BORRAR CONTACTO -->
-
-
-                        </span>
+                        </div>
+                        <!-- EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO EDITAR CONTACTO  -->
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" type="button" href="{% url 'borrar_contacto' id=contacto.id %}">Borrar</a>
                     </td>
                 </tr>
             {% endfor %}
