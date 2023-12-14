@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
@@ -6,6 +7,7 @@ from gastos.forms import *
 from gastos.models import Categorias
 from django.db.models import Sum
 from datetime import date, timedelta
+from django.utils import timezone
 
 def home_gastos(request):
     cuentas = Cuentas.objects.filter(user=request.user)
@@ -24,6 +26,9 @@ def home_gastos(request):
         
         gastos_cuenta = Gastos.objects.filter(fk_id_cuenta=cuenta)
 
+        gasto_mas_caro = gastos_cuenta.order_by('-precio').first()
+        gasto_mas_barato = gastos_cuenta.order_by('precio').first()
+        
         primer_dia_mes = today.replace(day=1)
         ultimo_dia_mes = (today.replace(day=1, month=(today.month % 12) + 1) - timedelta(days=1))
 
@@ -42,6 +47,8 @@ def home_gastos(request):
             'mes_actual': mes_actual,
             'gasto_total': gasto_total,
             'gastos_cuenta': gastos_cuenta,
+            'gasto_mas_caro': gasto_mas_caro,
+            'gasto_mas_barato': gasto_mas_barato,
         }
 
         context['cuentas_data'].append(cuenta_data)
@@ -177,12 +184,16 @@ def crear_gasto(request):
         categoria_id = request.POST.get('categoria')
         categoria = get_object_or_404(Categorias, id=categoria_id, user=request.user)
         descripcion = request.POST.get('descripcion')
-        precio = request.POST.get('precio')
+        precio = request.POST.get('precio').replace(',', '.')
         fecha = request.POST.get('fecha')
+        if not fecha:
+            fecha = timezone.now().strftime('%Y-%m-%d')
         fecha_gasto = date.fromisoformat(fecha)
         if fecha_gasto > date.today():
-            messages.error(request, "No puedes agregar un gasto en el futuro.")
+            messages.error(request, "No podes agregar un gasto en el futuro.")
             return redirect('home_gastos')
+        
+        precio_decimal = Decimal(precio)
 
         cuentas_seleccionadas = request.POST.getlist('cuentas')
 
@@ -193,7 +204,7 @@ def crear_gasto(request):
                 fk_id_categoria=categoria,
                 fk_id_cuenta=cuenta,
                 descripción=descripcion,
-                precio=precio,
+                precio=precio_decimal,
                 fecha=fecha
             )
             nuevo_gasto.save()
@@ -217,6 +228,10 @@ def editar_gasto(request, gasto_id, cuenta_id):
     gasto = get_object_or_404(Gastos, id=gasto_id, fk_id_cuenta__user=request.user)
 
     if request.method == 'POST':
+        request.POST._mutable = True
+        request.POST['precio'] = request.POST['precio'].replace(',', '.')
+        request.POST._mutable = False
+
         form = GastoForm(request.POST, instance=gasto)
         if form.is_valid():
             form.save()
@@ -230,6 +245,7 @@ def editar_gasto(request, gasto_id, cuenta_id):
     }
 
     return render(request, 'gastos/detalleGastos.html', context)
+
 
 # END VIEWS GASTOS
 

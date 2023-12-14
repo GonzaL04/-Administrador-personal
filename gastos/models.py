@@ -22,10 +22,9 @@ class Gastos(models.Model):
     fk_id_cuenta = models.ForeignKey(Cuentas,on_delete=models.CASCADE, null = True)
     descripción = models.CharField(max_length=200,null=True,blank=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
-    fecha = models.DateField()
+    fecha = models.DateField(null=True)
     hora = models.TimeField(default=timezone.now)
     
-
     def __str__(self):
         if( self.descripción == None):
             return "Gasto sin descripción ("+str(self.precio)+"$)"

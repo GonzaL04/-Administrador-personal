@@ -47,7 +47,33 @@
                         <a href="#nuevoGastoModal" class="btn btn-primary btn-sm" data-bs-toggle="modal">Nuevo Gasto</a>
                         {% include 'layouts/partials/gastosPage/modalGasto.html' %}
                         <a href="{% url 'detalle_gastos' cuenta_data.cuenta.id %}" class="btn btn-secondary btn-sm">Administrar Gastos</a>
-                        <a href="#" class="btn btn-info btn-sm" onclick="mostrarAlerta()">Ver Resumen</a>
+                        <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#resumenModal{{ cuenta_data.cuenta.id }}">Ver Resumen</a>
+
+                        {% for cuenta_data in cuentas_data %}
+                            <div class="modal fade" id="resumenModal{{ cuenta_data.cuenta.id }}" tabindex="-1" aria-labelledby="resumenModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="resumenModalLabel">Resumen de Gastos</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="resumenModalBody">
+                                            <p>Cuenta: {{ cuenta_data.cuenta.nombre }}</p>
+                                            {% if cuenta_data.gasto_mas_caro %}
+                                                <p>Gasto más caro: ${{ cuenta_data.gasto_mas_caro.precio }}</p>
+                                            {% else %}
+                                                <p>No hay gastos registrados</p>
+                                            {% endif %}
+                                            {% if cuenta_data.gasto_mas_barato %}
+                                                <p>Gasto más barato: ${{ cuenta_data.gasto_mas_barato.precio }}</p>
+                                            {% else %}
+                                                <p>No hay gastos registrados</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             {% endfor %}
@@ -63,9 +89,9 @@
         }
     </script>
 {% endif %}
-<script>
-    function mostrarAlerta() {
-        alert('Página en mantenimiento');
-    }
-</script>
+    <script>
+        function mostrarAlerta() {
+            alert('Página en mantenimiento');
+        }
+    </script>
 {% endblock %}

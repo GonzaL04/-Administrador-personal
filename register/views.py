@@ -8,17 +8,14 @@ from .forms import CreateUserForm
 
 # Create your views here.
 
-#Funcion que retorna el home
 def home(request):
     return render(request, 'home.html')
 
 @login_required(login_url='signin')
-#Funcion retornar el index
 def index(request):
     return render(request, 'principal/index.html')
 
 #AUTENTICACIONES AUTENTICACIONES AUTENTICACIONES AUTENTICACIONES AUTENTICACIONES AUTENTICACIONES 
-#Funcion registrarse
 def signup(request):
     if request.user.is_authenticated:
         return redirect('index')
@@ -29,7 +26,7 @@ def signup(request):
             if form.is_valid():
                 email = form.cleaned_data.get('email')
                 if User.objects.filter(email=email).exists():
-                    messages.error(request, "El correo electrónico ya está registrado.")
+                    messages.error(request, "El mail ya está registrado.")
                 else:
                     form.save()
                     user = form.cleaned_data.get('username')
@@ -40,13 +37,11 @@ def signup(request):
         return render(request, 'register/signup.html', context)
 
 
-#Funcion cerrar sesion
 def singout(request):
     logout(request)
     return redirect('home')
 
 
-#Funcion iniciar sesion
 def signin(request):
     if request.user.is_authenticated:
         return redirect('index')
